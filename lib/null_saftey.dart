@@ -33,6 +33,22 @@ String serveCoffee([String? temp]) {
   // by using '!' null aware assertion operator, which tells dart analyzer that the value of temp
   // will never be null. So when using ! we need to be carefull. Using it incorrectly can
   // lead to runtime error if the value of temp variable turns out to be null.
-  // using '!' opts out static checking(done by compier of tool beforing runing code) and opting in runtime checking  
+  // using '!' opts out static checking(done by compier of tool beforing runing code) and opting in runtime checking
   return temp! + ' coffee';
+}
+
+// Here control flow analysis doesnot work very well for detecting error in null as if serve is called first before calling either heat or chill can throw error.
+class Coffee {
+  // instead of checking this property statically check it at run time. By using late keyword you tell that initialize a varible temp that contains value of type String (meaning it is not nullable) but enforce that gurantee at runtime. But if temp variable has not been initialized yet it will throw runtime exception
+  late String _temp;
+
+  void heat() {
+    _temp = 'hot';
+  }
+
+  void chill() {
+    _temp = 'iced';
+  }
+
+  String serve() => _temp + ' coffee';
 }
